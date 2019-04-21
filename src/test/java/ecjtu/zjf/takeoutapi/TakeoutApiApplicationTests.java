@@ -15,11 +15,14 @@ public class TakeoutApiApplicationTests {
 
     @Autowired
     SalerMapper salerMapper;
+    @Autowired
+    ISalerService iSalerService;
 
     @Test
     public void contextLoads() {
-        Saler saler = new Saler();
-        saler.setName("test1");
+
+        Saler saler = iSalerService.getById(1);
+        System.out.println(saler);
     }
 
 }
