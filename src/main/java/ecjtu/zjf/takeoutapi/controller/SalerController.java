@@ -58,13 +58,22 @@ public class SalerController {
             @ApiImplicitParam(paramType = "query", name = "password", dataType = "String", required = true, value = "商户密码", defaultValue = ""),
             @ApiImplicitParam(paramType = "query", name = "name", dataType = "String", required = true, value = "店铺名称", defaultValue = ""),
             @ApiImplicitParam(paramType = "query", name = "location", dataType = "String", required = true, value = "店铺地址", defaultValue = ""),
-            @ApiImplicitParam(paramType = "query", name = "tel", dataType = "int", required = true, value = "商户联系电话", defaultValue = "")
+            @ApiImplicitParam(paramType = "query", name = "tel", dataType = "String", required = true, value = "商户联系电话", defaultValue = "")
     })
-    @PostMapping("/register")
+    @PostMapping(value="/register")
     public boolean register(@ModelAttribute Saler saler){
         boolean res=iSalerService.save(saler);
         return res;
     }
-
+    @ApiOperation("验证账号是否存在")
+    @ApiImplicitParam(paramType="query",name="username",dataType="String",required=true,value="目标商户id",defaultValue="")
+    @PostMapping(value = "/check_username")
+    public boolean check_username(@RequestParam String username){
+        QueryWrapper<Saler> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("username",username);
+        int res=iSalerService.count(queryWrapper);
+        if(res>0) return true;
+        return false;
+    }
 
 }

@@ -1,6 +1,6 @@
 package ecjtu.zjf.takeoutapi.mapper;
 
-import ecjtu.zjf.takeoutapi.entity.Order;
+import ecjtu.zjf.takeoutapi.entity.Orders;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author zjf
  * @since 2019-04-21
  */
-public interface OrderMapper extends BaseMapper<Order> {
+public interface OrderMapper extends BaseMapper<Orders> {
 
 }

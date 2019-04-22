@@ -61,7 +61,7 @@ public class Saler implements Serializable,UserDetails {
 
     private String location;
 
-    private Integer tel;
+    private String tel;
 
     private String avatar;
 }

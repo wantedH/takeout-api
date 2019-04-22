@@ -1,6 +1,6 @@
 package ecjtu.zjf.takeoutapi.service;
 
-import ecjtu.zjf.takeoutapi.entity.Order;
+import ecjtu.zjf.takeoutapi.entity.Orders;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author zjf
  * @since 2019-04-21
  */
-public interface IOrderService extends IService<Order> {
+public interface IOrderService extends IService<Orders> {
 
 }
