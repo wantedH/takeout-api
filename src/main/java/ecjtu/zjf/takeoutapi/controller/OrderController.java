@@ -31,7 +31,7 @@ public class OrderController {
     @Autowired
     IOrderService orderService;
 
-    @ApiOperation("订单商品详情列表")
+    @ApiOperation("订单列表")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "token", dataType = "String", required = true, value = "用户唯一认证", defaultValue = ""),
             @ApiImplicitParam(paramType = "query", name = "nowPage", dataType = "int", required = false, value = "现在所在页数", defaultValue = "1")
