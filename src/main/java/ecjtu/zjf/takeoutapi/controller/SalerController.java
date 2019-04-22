@@ -18,6 +18,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.annotations.Cacheable;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -42,6 +43,12 @@ public class SalerController {
     @Autowired
     ISalerService iSalerService;
 
+    @ApiOperation("商户列表")
+    @ApiImplicitParam(paramType = "query", name = "nowPage", dataType = "int", required = false, value = "现在所在页数", defaultValue = "1")
+    @PostMapping("/list")
+    public String list(@RequestParam(defaultValue = "1",required = false) int nowPage){
+        return JSON.toJSONString(iSalerService.pageSaleGoods(nowPage));
+    }
 
     @ApiOperation("商户详细信息")
     @ApiImplicitParam(paramType="query",name="id",dataType="int",required=true,value="目标商户id",defaultValue="")
