@@ -5,8 +5,15 @@
     <title>登录</title>
 </head>
 <body>
-<h3>您好</h3>
+<h3>您好!</h3>
 <span th:text="${session.SPRING_SECURITY_CONTEXT.authentication.principal.name}"></span>
+<img th:src="${session.SPRING_SECURITY_CONTEXT.authentication.principal.avatar}" style="width: 50px;height: 50px">
+<a href="/saler/change">查看信息</a>
+<p>
+
+</p>
+
+
 
 </body>
 </html>

@@ -27,7 +27,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()
-//                .loginPage("/login")  // 转到的登陆路径 ,springboot自带一个
+                .loginPage("/login")  // 转到的登陆路径 ,springboot自带一个
 //                .failureUrl("/login?error=true")
 //                .defaultSuccessUrl("/home")
                 .permitAll()
