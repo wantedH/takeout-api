@@ -1,7 +1,11 @@
 package ecjtu.zjf.takeoutapi.service;
 
-import ecjtu.zjf.takeoutapi.entity.Order;
+import ecjtu.zjf.takeoutapi.dto.GoodsOrderDTO;
+import ecjtu.zjf.takeoutapi.dto.OrderGoodsDTO;
+import ecjtu.zjf.takeoutapi.entity.Orders;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -11,6 +15,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author zjf
  * @since 2019-04-21
  */
-public interface IOrderService extends IService<Order> {
-
+public interface IOrderService extends IService<Orders> {
+     List<Orders> pageSaleGoods(String token, int nowPage);
+     boolean saveOrder(Orders orders, List<GoodsOrderDTO> goodsOrderDTOS);
 }

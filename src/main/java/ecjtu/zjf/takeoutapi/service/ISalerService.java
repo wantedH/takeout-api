@@ -15,4 +15,5 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 public interface ISalerService extends IService<Saler>,UserDetailsService {
 
 
+
 }

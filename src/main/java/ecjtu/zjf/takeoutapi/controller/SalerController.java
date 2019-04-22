@@ -46,12 +46,7 @@ public class SalerController {
         return JSON.toJSONString(res);
     }
 
-    @ApiOperation("得到现在用户")
-    @PostMapping(value="/nowUser")
-    public String nowUser(){
-        Saler user = (Saler) SecurityContextHolder.getContext().getAuthentication() .getPrincipal();
-        return JSON.toJSONString(user);
-    }
+
     @ApiOperation("商户注册")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "username", dataType = "String", required = true, value = "商户账号", defaultValue = ""),

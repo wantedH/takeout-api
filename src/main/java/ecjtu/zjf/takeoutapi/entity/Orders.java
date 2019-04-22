@@ -2,6 +2,9 @@ package ecjtu.zjf.takeoutapi.entity;
 
 import java.time.LocalDateTime;
 import java.io.Serializable;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -17,16 +20,17 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class Order implements Serializable {
+public class Orders implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private int id;
+    private String id;
 
     /**
      * 买家信息
      */
     private String userToken;
+
 
     private Integer salerId;
 
@@ -43,7 +47,7 @@ public class Order implements Serializable {
     /**
      * 买家电话
      */
-    private Integer userTel;
+    private String userTel;
 
     /**
      * 送达地址
