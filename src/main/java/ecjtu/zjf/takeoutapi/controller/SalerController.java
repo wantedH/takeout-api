@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -63,4 +64,19 @@ public class SalerController {
         if(count>0) return true;
         return false;
     }
+    @ApiOperation("商户注册")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "username", dataType = "String", required = true, value = "商户账号", defaultValue = ""),
+            @ApiImplicitParam(paramType = "query", name = "password", dataType = "String", required = true, value = "商户密码", defaultValue = ""),
+            @ApiImplicitParam(paramType = "query", name = "name", dataType = "String", required = true, value = "店铺名称", defaultValue = ""),
+            @ApiImplicitParam(paramType = "query", name = "location", dataType = "String", required = true, value = "店铺地址", defaultValue = ""),
+            @ApiImplicitParam(paramType = "query", name = "tel", dataType = "int", required = true, value = "商户联系电话", defaultValue = "")
+    })
+    @PostMapping("/register")
+    public boolean register(@ModelAttribute Saler saler){
+        boolean res=iSalerService.save(saler);
+        return res;
+    }
+
+
 }

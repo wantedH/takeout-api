@@ -2,9 +2,67 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>商户注册</title>
 </head>
 <body>
+    <h1>商户注册</h1>
+    <form>
+        <table>
+            <tr>
+                <td style="text-align: right">账号：</td>
+                <td><input id="username" type="text" oninput = "value=value.replace(/[^\d]/g,'')" maxlength="15" /></td>
+             </tr>
+            <tr>
+                <td style="text-align: right">密码：</td>
+                <td ><input type="password" id="password1"/></td>
+            </tr>
+            <tr>
+                <td style="text-align: right">重复输入密码：</td>
+                <td><input type="password" id="password2"/><span id="message1" style="color:red"></span></td>
+            </tr>
+            <tr>
+                <td style="text-align: right">店铺名称：</td>
+                <td><input id="name" type="text" /></td>
+            </tr>
+            <tr>
+                <td style="text-align: right">店铺地址：</td>
+                <td><input id="location" type="text"/></td>
+            </tr>
+            <tr>
+                <td style="text-align: right">联系电话：</td>
+                <td><input id="tel" type="text" oninput="value=value.replace(/[^\d]/g,'')" maxlength="11"/>
+                <span id="message2" style="color: red;"></span></td>
+            </tr>
 
+        </table>
+        <tr>
+        <button id="register" type="button" style="margin-left: 160px">注册</button>
+        </tr>
+    </form>
 </body>
 </html>
+<script src="js/jquery-3.4.0.min.js"></script>
+<script>
+    $(function () {
+        $("#password2").blur(function(){
+            if ($(this).val() == $("#password1").val())
+            {
+                $("#message1").html("")
+            }
+            else{
+                $("#message1").html("密码不一致，请重新输入")
+            }
+    })
+        $("#tel").blur(function () {
+            if($(this).val().length<11)
+            {
+                $("#message2").html("号码错误，请重新输入")
+            }
+            else{
+                $("#message2").html("")
+            }
+        })
+    })
+
+
+</script>

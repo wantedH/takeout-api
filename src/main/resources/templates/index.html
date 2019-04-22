@@ -15,15 +15,6 @@
             <input type="button" id="register" value="注册" />
         </form>
     </fieldset>
-    <fieldset id="res-field" style="display: none">
-        <form>
-            <p id="resUsername">用户名: <input type="text" name="username" /></p>
-            <p id="resPassword">密&nbsp;&nbsp;&nbsp;&nbsp;码: <input type="text" name="password" /></p>
-            <p id="resRepassword">重复密码: <input type="text" name="repasswod" /></p>
-            <button type="button" id="resSubmit">提交</button>&nbsp;&nbsp;&nbsp;
-            <input type="button" id="close" value="关闭" />
-        </form>
-    </fieldset>
 </div>
 </body>
 </html>
@@ -39,12 +30,6 @@
             }).fail(function () {
                 window.alert("请重新输入")
             });
-        });
-        $("#register").click(function () {
-            $("#res-field").css("display","block");
-        });
-        $("#close").click(function () {
-            $("#res-field").css("display","none");
         });
     });
 </script>
