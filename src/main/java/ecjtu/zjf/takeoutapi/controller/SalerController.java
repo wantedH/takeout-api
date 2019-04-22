@@ -5,6 +5,8 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.segments.MergeSegments;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import ecjtu.zjf.takeoutapi.common.FileUtil;
 import ecjtu.zjf.takeoutapi.entity.Saler;
 import ecjtu.zjf.takeoutapi.service.ISalerService;
 import io.swagger.annotations.Api;
@@ -12,9 +14,12 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashMap;
@@ -69,6 +74,27 @@ public class SalerController {
         int res=iSalerService.count(queryWrapper);
         if(res>0) return true;
         return false;
+    }
+
+    @ApiOperation("修改信息")
+    @PostMapping(value = "/change")
+    public boolean change(@RequestBody Saler saler){
+        QueryWrapper<Saler> wrapper=new QueryWrapper<>();
+        wrapper.eq("id",saler.getId());
+        return iSalerService.update(saler,wrapper);
+    }
+
+    @ApiOperation("修改展示图")
+    @PostMapping(value = "/uploadAvatar")
+    @Async
+    public boolean uploadAvatar(@RequestParam MultipartFile file) throws IOException {
+        String name=FileUtil.TransformFile(file);
+        Saler saler = (Saler) SecurityContextHolder.getContext().getAuthentication() .getPrincipal();
+        saler.setAvatar(name);
+
+        QueryWrapper<Saler> wrapper=new QueryWrapper<>();
+        wrapper.eq("id",saler.getId());
+        return iSalerService.update(saler,wrapper);
     }
 
 }
