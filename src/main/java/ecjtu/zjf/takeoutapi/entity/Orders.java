@@ -47,7 +47,9 @@ public class Orders implements Serializable {
     /**
      * 买家电话
      */
+
     private String userTel;
+
 
     /**
      * 送达地址

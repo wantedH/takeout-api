@@ -1,7 +1,9 @@
 package ecjtu.zjf.takeoutapi.mapper;
 
+
 import ecjtu.zjf.takeoutapi.dto.GoodsOrderDTO;
-import ecjtu.zjf.takeoutapi.dto.OrderGoodsDTO;
+
+
 import ecjtu.zjf.takeoutapi.entity.Orders;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Insert;

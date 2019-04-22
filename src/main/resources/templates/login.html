@@ -1,16 +1,16 @@
-<html lang="en"><head>
+<html xmlns:th="http://www.thymeleaf.org"><head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Please sign in</title>
+    <title>登录</title>
     <link href="css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
     <link href="css/signin.css" rel="stylesheet" crossorigin="anonymous">
 </head>
 <body>
 <div class="container">
     <form class="form-signin" method="post" action="/login">
-        <h2 class="form-signin-heading">请登录</h2>
+        <h2 class="form-signin-heading" style="margin-left: 80px">商户登录</h2>
         <p>
             <label for="username" class="sr-only">用户名</label>
             <input type="text" id="username" name="username" class="form-control" placeholder="用户名" required="" autofocus="">
@@ -19,7 +19,10 @@
             <label for="password" class="sr-only">密码</label>
             <input type="password" id="password" name="password" class="form-control" placeholder="密码" required="">
         </p>
+        <span th:if="${param.error}" style="color:red">账号或密码错误</span>
         <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
+        <button id="register" class="btn btn-lg btn-primary btn-block" type="button" onclick="window.location.href='/register'">注册</button>
     </form>
 </div>
-</body></html>
+</body>
+</html>
