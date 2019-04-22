@@ -35,5 +35,6 @@ public class Goods implements Serializable {
      */
     private Boolean state;
 
+    private String avatar;
 
 }
