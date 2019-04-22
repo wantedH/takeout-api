@@ -2,6 +2,7 @@ package ecjtu.zjf.takeoutapi.service;
 
 import ecjtu.zjf.takeoutapi.entity.Saler;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 /**
  * <p>
@@ -11,6 +12,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author zjf
  * @since 2019-04-21
  */
-public interface ISalerService extends IService<Saler> {
+public interface ISalerService extends IService<Saler>,UserDetailsService {
+
 
 }
