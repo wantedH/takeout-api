@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
@@ -45,24 +46,11 @@ public class SalerController {
         return JSON.toJSONString(res);
     }
 
-
-    @ApiOperation("商户登录")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType="query",name="username",dataType="String",required=true,value="用户的姓名",defaultValue=""),
-            @ApiImplicitParam(paramType="query",name="password",dataType="String",required=true,value="用户的密码",defaultValue="")
-    })
-    @PostMapping("/login")
-    public boolean login(@RequestParam String username,@RequestParam String password){
-        QueryWrapper<Saler> salerQueryWrapper=new QueryWrapper<>();
-        Map<String,Object> data=new HashMap<>();
-
-        data.put("username",username);
-        data.put("password",password);
-        salerQueryWrapper.allEq(data);
-
-        int count=iSalerService.count(salerQueryWrapper);
-        if(count>0) return true;
-        return false;
+    @ApiOperation("得到现在用户")
+    @PostMapping(value="/nowUser")
+    public String nowUser(){
+        Saler user = (Saler) SecurityContextHolder.getContext().getAuthentication() .getPrincipal();
+        return JSON.toJSONString(user);
     }
     @ApiOperation("商户注册")
     @ApiImplicitParams({

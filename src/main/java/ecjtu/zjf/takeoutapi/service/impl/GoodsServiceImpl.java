@@ -4,7 +4,10 @@ import ecjtu.zjf.takeoutapi.entity.Goods;
 import ecjtu.zjf.takeoutapi.mapper.GoodsMapper;
 import ecjtu.zjf.takeoutapi.service.IGoodsService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -17,4 +20,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements IGoodsService {
 
+    @Autowired GoodsMapper goodsMapper;
+
+    @Override
+    public List<Goods> listFromOrder(int orderId) {
+        return goodsMapper.selectFromOrder(orderId);
+    }
 }

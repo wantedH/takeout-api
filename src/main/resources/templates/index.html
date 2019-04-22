@@ -5,31 +5,12 @@
     <title>登录</title>
 </head>
 <body>
-<div class="wrap" >
-    <h1>商户登录</h1>
-    <fieldset>
-        <form>
-            <p id="loginUsername">用户名: <input type="text" name="username" /></p>
-            <p id="loginPassword">密&nbsp;&nbsp;&nbsp;&nbsp;码: <input type="text" name="password" /></p>
-            <button type="button" id="submit">登录</button>&nbsp;&nbsp;&nbsp;
-            <input type="button" id="register" value="注册" />
-        </form>
-    </fieldset>
-</div>
+<h3>您好</h3>
+<span th:text="${session.SPRING_SECURITY_CONTEXT.authentication.principal.name}"></span>
+
 </body>
 </html>
 <script src="js/jquery-3.4.0.min.js"></script>
 <script>
-    $(document).ready(function () {
-        $("#submit").click(function () {
-            $.post("/saler/login",{
-                username: $("#loginUsername").val(),
-                password: $("#loginPassword").val()
-            },function(res) {
-                window.location.reload();
-            }).fail(function () {
-                window.alert("请重新输入")
-            });
-        });
-    });
+
 </script>
