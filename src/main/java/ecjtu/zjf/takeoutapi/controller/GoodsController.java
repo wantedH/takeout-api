@@ -56,6 +56,18 @@ public class GoodsController {
         return JSON.toJSONString(res);
     }
 
+    @ApiOperation("移除商品")
+    @ApiImplicitParam(paramType = "query", name = "id", dataType = "String", required = true, value = "目标订单id", defaultValue = "")
+    @PostMapping(value = "/delete")
+    public boolean delete(@RequestParam int id){
+        return goodsService.removeById(id);
+    }
+    @ApiOperation("新增商品")
+    @PostMapping(value = "/add")
+    public boolean add(@RequestBody Goods goods){
+        return goodsService.save(goods);
+    }
+
     @ApiOperation("修改信息")
     @PostMapping(value = "/change")
     public boolean change(@RequestBody Goods goods){
@@ -76,5 +88,7 @@ public class GoodsController {
         wrapper.eq("id",id);
         return goodsService.update(goods,wrapper);
     }
+
+
 
 }
