@@ -21,7 +21,7 @@ public class Orders implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private int id;
+    private String id;
 
     /**
      * 买家信息
