@@ -1,7 +1,6 @@
 package ecjtu.zjf.takeoutapi.common;
 
-import com.bbdtek.bhtravel.commons.uitls.Empty4JUtil;
-import com.bbdtek.bhtravel.commons.uitls.JsonTools;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
