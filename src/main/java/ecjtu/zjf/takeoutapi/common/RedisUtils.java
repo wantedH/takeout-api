@@ -17,13 +17,13 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class RedisUtils{
 
-    @Autowired
+    @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
-    @Autowired
+    @Resource
     private HashOperations<String, String, Object> hashOperations;
 
-    @Autowired
+    @Resource
     private ListOperations<String, Object> listOperations;
 
     @Resource(name = "redisTemplate")
