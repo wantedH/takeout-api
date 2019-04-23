@@ -18,4 +18,8 @@ public class PageController {
     public String login(){
         return "login";
     }
+    @RequestMapping("/goods")
+    public String goods(){
+        return  "goods";
+    }
 }
