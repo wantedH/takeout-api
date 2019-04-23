@@ -4,6 +4,8 @@ import ecjtu.zjf.takeoutapi.entity.Saler;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.util.List;
+
 /**
  * <p>
  * 商户信息 服务类
@@ -14,5 +16,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
  */
 public interface ISalerService extends IService<Saler>,UserDetailsService {
 
+    List<Saler> pageSaleGoods(int nowPage);
 
 }

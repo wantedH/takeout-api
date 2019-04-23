@@ -2,6 +2,9 @@ package ecjtu.zjf.takeoutapi.entity;
 
 import java.time.LocalDateTime;
 import java.io.Serializable;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -28,6 +31,7 @@ public class Orders implements Serializable {
      */
     private String userToken;
 
+
     private Integer salerId;
 
     /**
@@ -43,7 +47,9 @@ public class Orders implements Serializable {
     /**
      * 买家电话
      */
-    private String  userTel;
+
+    private String userTel;
+
 
     /**
      * 送达地址

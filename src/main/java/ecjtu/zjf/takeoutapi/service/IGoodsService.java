@@ -1,5 +1,6 @@
 package ecjtu.zjf.takeoutapi.service;
 
+import ecjtu.zjf.takeoutapi.dto.OrderGoodsDTO;
 import ecjtu.zjf.takeoutapi.entity.Goods;
 import com.baomidou.mybatisplus.extension.service.IService;
 import ecjtu.zjf.takeoutapi.mapper.GoodsMapper;
@@ -16,6 +17,6 @@ import java.util.List;
  * @since 2019-04-21
  */
 public interface IGoodsService extends IService<Goods> {
-    public List<Goods> listFromOrder(int orderId);
-
+    List<OrderGoodsDTO> listFromOrder(String orderId);
+    List<Goods> pageSaleGoods(int id,int nowPage);
 }

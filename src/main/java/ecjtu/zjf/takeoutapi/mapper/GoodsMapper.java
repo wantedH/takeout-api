@@ -1,5 +1,6 @@
 package ecjtu.zjf.takeoutapi.mapper;
 
+import ecjtu.zjf.takeoutapi.dto.OrderGoodsDTO;
 import ecjtu.zjf.takeoutapi.entity.Goods;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Select;
@@ -17,5 +18,5 @@ import java.util.List;
 public interface GoodsMapper extends BaseMapper<Goods> {
 
     @Select("SELECT * FROM goods right join order_goods_rel on goods_id=goods.id where order_id = #{id}")
-    public List<Goods> selectFromOrder(int orderId);
+    List<OrderGoodsDTO> selectFromOrder(String orderId);
 }
