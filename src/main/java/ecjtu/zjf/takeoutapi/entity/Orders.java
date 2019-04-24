@@ -65,6 +65,8 @@ public class Orders implements Serializable {
      * 下单时间
      */
     private LocalDateTime time;
-
-
+    /**
+     * 订单状态
+     */
+    private Integer state;
 }

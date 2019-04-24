@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+>
+
+
+<head>
+    <meta charset="UTF-8">
+
+    <link href="dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="css/common.css" rel="stylesheet" crossorigin="anonymous">
+    <script src="dist/js/bootstrap.min.js"></script>
+    <title>店铺</title>
+    <style type="text/css">
+        span{
+            color:dodgerblue;
+            font-size:26px;
+        }
+        input{
+            font-size:26px;
+        }
+    </style>
+</head>
+<body>
+
+
+<nav class="site-header sticky-top py-1">
+    <div class="container d-flex flex-column flex-md-row justify-content-between">
+        <a class="py-2" href="/index">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="d-block mx-auto"><circle cx="12" cy="12" r="10"></circle><line x1="14.31" y1="8" x2="20.05" y2="17.94"></line><line x1="9.69" y1="8" x2="21.17" y2="8"></line><line x1="7.38" y1="12" x2="13.12" y2="2.06"></line><line x1="9.69" y1="16" x2="3.95" y2="6.06"></line><line x1="14.31" y1="16" x2="2.83" y2="16"></line><line x1="16.62" y1="12" x2="10.88" y2="21.94"></line></svg>
+        </a>
+        <a class="py-2 d-none d-md-inline-block" href="/info">商户</a>
+        <a class="py-2 d-none d-md-inline-block" href="/goods">商品</a>
+        <a class="py-2 d-none d-md-inline-block" href="/orders">订单</a>
+        <a class="py-2 d-none d-md-inline-block" href="/logout">退出</a>
+    </div>
+</nav>
+
+<section class="jumbotron">
+    <div class="container">
+        <div class="align-items-center">
+            <span>展示图 :</span>
+            <form id="uploadForm" >
+                <input class="parameter" type="file" name="file" >
+                <input id="doUpload" type="button" value="确定">
+            </form>
+
+            <img style="width: 60%;height: 60%" th:src="${session.SPRING_SECURITY_CONTEXT.authentication.principal.avatar}">
+        </div>
+        <div >
+            <p class="lead text-muted"><span>用户名 : </span>[[${session.SPRING_SECURITY_CONTEXT.authentication.principal.username}]]</p>
+            <p><span>店名 : <span><input id="salename" th:value="${session.SPRING_SECURITY_CONTEXT.authentication.principal.name}"></p>
+            <p><span>联系电话 : </span><input id="tel" th:value="${session.SPRING_SECURITY_CONTEXT.authentication.principal.tel}"></p>
+            <p><span>地址 : </span><textarea id="location" style="font-size: 26px;width: 90%" th:text="${session.SPRING_SECURITY_CONTEXT.authentication.principal.location}"></textarea></p>
+
+        </div>
+        <p>
+            <a id="doChange" href="javascript:void(0)" class="btn btn-primary my-2">修改</a>
+        </p>
+    </div>
+</section>
+
+
+<div class="d-md-flex flex-md-equal w-100 my-md-3 pl-md-3">
+
+</div>
+
+
+
+
+<footer class="container py-5">
+    <div class="row">
+        <div class="col-12 col-md">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="d-block mb-2"><circle cx="12" cy="12" r="10"></circle><line x1="14.31" y1="8" x2="20.05" y2="17.94"></line><line x1="9.69" y1="8" x2="21.17" y2="8"></line><line x1="7.38" y1="12" x2="13.12" y2="2.06"></line><line x1="9.69" y1="16" x2="3.95" y2="6.06"></line><line x1="14.31" y1="16" x2="2.83" y2="16"></line><line x1="16.62" y1="12" x2="10.88" y2="21.94"></line></svg>
+            <small class="d-block mb-3 text-muted">© 2017-2018</small>
+        </div>
+        <div class="clo-6 col-md">
+            <h5>ECJTU.Zjf.TakeOutProject</h5>
+
+        </div>
+
+
+
+    </div>
+</footer>
+
+
+
+
+<script src="js/jquery-3.4.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        var userInfo={};
+        userInfo.name=$("#salename").val();
+        userInfo.tel=$("#tel").val();
+        userInfo.location=$("#location").val();
+//        alert(JSON.stringify(userInfo));
+        $("#doChange").click(function () {
+            if(userInfo.name==$("#salename").val() &&
+                userInfo.tel==$("#tel").val() &&
+                userInfo.location==$("#location").val())
+            {
+                alert("请做出修改");
+            }else{
+                var msg="将会修改 --"
+                var dataObj={};
+                if (userInfo.name!=$("#salename").val()){
+                    dataObj.name=$("#salename").val();
+                    msg+=" 名字"
+                }
+                if (userInfo.tel!=$("#tel").val()){
+                    dataObj.tel=$("#tel").val();
+                    msg+=" 电话"
+                }
+                if (userInfo.location!=$("#location").val()){
+                    dataObj.location=$("#location").val();
+                    msg+=" 地址"
+                }
+                alert(msg)
+                var dataStr=JSON.stringify(dataObj);
+
+                $.post("/saler/change",dataObj,function (res) {
+                    if(res==true){
+                        alert("修改成功");
+                        window.location.reload();
+                    }else {
+                        alert("失败!请重试");
+                    }
+                })
+            }
+        });
+        $("#doUpload").click(function () {
+            $.ajax({
+                url: '/saler/uploadAvatar',
+                type: 'POST',
+                cache: false,
+                data: new FormData($('#uploadForm')[0]),
+                processData: false,
+                contentType: false
+            }).done(function(res) {
+                if(res==true){
+                    alert("上传成功");
+                    window.location.reload();
+                }else{
+                    alert("失败!请重试");
+                }
+            }).fail(function(res) {
+                alert("连接出错");
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
+

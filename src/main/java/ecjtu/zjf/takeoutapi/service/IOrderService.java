@@ -19,6 +19,7 @@ import java.util.List;
 public interface IOrderService extends IService<Orders> {
 
      List<Orders> pageSaleGoods(String token, int nowPage);
+     List<Orders> pageSalerOrders(int id,int nowPage);
      boolean saveOrder(Orders orders, List<GoodsOrderDTO> goodsOrderDTOS);
 
 }

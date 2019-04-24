@@ -1,40 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+>
+
 <head>
     <meta charset="UTF-8">
     <link href="dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
     <link href="css/common.css" rel="stylesheet" crossorigin="anonymous">
+    <script src="dist/js/bootstrap.min.js"></script>
     <title>商品</title>
 </head>
 <body>
+
 <nav class="site-header sticky-top py-1">
     <div class="container d-flex flex-column flex-md-row justify-content-between">
-        <a class="py-2" href="#">
+        <a class="py-2" href="/index">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="d-block mx-auto"><circle cx="12" cy="12" r="10"></circle><line x1="14.31" y1="8" x2="20.05" y2="17.94"></line><line x1="9.69" y1="8" x2="21.17" y2="8"></line><line x1="7.38" y1="12" x2="13.12" y2="2.06"></line><line x1="9.69" y1="16" x2="3.95" y2="6.06"></line><line x1="14.31" y1="16" x2="2.83" y2="16"></line><line x1="16.62" y1="12" x2="10.88" y2="21.94"></line></svg>
         </a>
-        <a class="py-2 d-none d-md-inline-block" href="/index">商户</a>
+        <a class="py-2 d-none d-md-inline-block" href="/info">商户</a>
         <a class="py-2 d-none d-md-inline-block" href="/goods">商品</a>
-        <a class="py-2 d-none d-md-inline-block" href="#">订单</a>
-        <a class="py-2 d-none d-md-inline-block" href="#">退出</a>
+        <a class="py-2 d-none d-md-inline-block" href="/orders">订单</a>
+        <a class="py-2 d-none d-md-inline-block" href="/logout">退出</a>
     </div>
 </nav>
 
-<div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light">
-    <div class="col-md-5 p-lg-5 mx-auto my-5">
-        <h1 class="display-4 font-weight-normal">商品信息</h1>
-        <a class="btn btn-outline-secondary" href="#">添加商品</a>
-
-
-    </div>
-    <div class="product-device box-shadow d-none d-md-block"></div>
-    <div class="product-device product-device-2 box-shadow d-none d-md-block"></div>
-</div>
-
 <div id="goodsList">
-
+    <button id="moreGoods" class="btn btn-lg btn-primary btn-block" >更多</button>
+    <a href="/goodsDetail" class="btn btn-lg btn-primary btn-block" >添加</a>
 </div>
-
-
 
 <footer class="container py-5">
     <div class="row">
@@ -47,45 +40,64 @@
 
         </div>
 
-
-
     </div>
 </footer>
 
-
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
 <script src="js/jquery-3.4.0.min.js"></script>
-
-<script src="dist/js/bootstrap.min.js"></script>
-
 <script>
     $(document).ready(function () {
-        var user;
-        var goods;
-        var i=1;
-        $.post("/nowUser",{},function (res) {
-             user = JSON.parse(res);
-        });
-        $.post("/goods/saleGoods",{
-            id:user.id,
-            nowPage:i
-        },function () {
-            
-        })
 
-        $("#goodsList").append("<div class=\"d-md-flex flex-md-equal w-100 my-md-3 pl-md-3\">" +
-            "    <div class=\"bg-dark mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden\">" +
-            "        <div class=\"my-3 py-3\">" +
-            "            <h2 class=\"display-5\">"+"tartar"+"</h2>" +
-            "            <p class=\"lead\">"+"tartar"+"</p>" +
-            "        </div>" +
-            "        <div class=\"bg-light box-shadow mx-auto\" style=\"width: 80%; height: 300px; border-radius: 21px 21px 0 0;\"></div>" +
-            "    </div>" +
-            "
-            "</div>")
+        var userId=[[${session.SPRING_SECURITY_CONTEXT.authentication.principal.id}]];
+        var i=1;
+        var count=0;
+        var classChoose=["bg-dark","bg-light","bg-light","bg-primary"];
+        var bgChoose=["bg-white","bg-dark","bg-dark ","bg-white"];
+        var textChoose=["text-white","text-black","text-black","text-white"];
+        getGoods();
+        $("#moreGoods").click(function () {
+            getGoods();
+        });
+        var stateChoose={true:"(出售)",false:"(停售)"}
+        function getGoods() {
+            $.post("/goods/saleGoods",{
+                id:userId,
+                nowPage:i
+            },function (res) {
+
+                var data=JSON.parse(res);
+                if(data.length>0) {
+                    $("#moreGoods").before("<div class=\"d-md-flex flex-md-equal w-100 my-md-3 pl-md-3\"></div>");
+                    for (var k = 0; k < data.length; k++) {
+                        count=count%4;
+                        $("#moreGoods").prev().append(
+                            "<div style='max-width: 50%' class=\"" + classChoose[count] + " mr-md-3 pt-3 px-3 pt-md-5 px-md-5  " + textChoose[count] + " overflow-hidden\">\n" +
+                            "    <div class=\"my-3 p-3\">\n" +
+                            "        <h2 class=\"display-5\">" + data[k].name + "</h2>\n" +
+                            "        <p style=\"word-wrap:break-word;word-break:break-all;overflow: hidden;\" class=\"lead\">" + data[k].doc + "</p>\n" +
+                            "<a href=\"/goodsDetail/"+data[k].id+"\" class=\"btn btn-success my-2\" >调整</a><span>"+stateChoose[data[k].state]+"</span>"+
+                            "    </div>\n" +
+                            "    <div class=\" " + bgChoose[count] + " box-shadow text-center mx-auto\" style=\"width: 80%; height: 300px; border-radius: 21px 21px 0 0;\">" +
+                            "    <img  style='width: 90%;border-radius: 21px 21px 0 0;' src=\"" + data[k].avatar + "\">" +
+                            "</div>\n" +
+                            "</div>\n"
+                        );
+                        count++;
+                    }
+                    i++;
+                } else {
+                    $("#moreGoods").attr("disabled","disabled");
+                    $("#moreGoods").html("没有更多了");
+                    $("#moreGoods").addClass("btn-secondary");
+                }
+
+            });
+        }
+
     });
 </script>
+
 </body>
 </html>
+
+
+

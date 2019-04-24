@@ -38,6 +38,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 
         QueryWrapper<Goods> queryWrapper=new QueryWrapper<>();
         queryWrapper.eq("saler_id",id);
+        queryWrapper.orderByDesc("id");
 
         return goodsMapper.selectPage(page,queryWrapper).getRecords();
     }

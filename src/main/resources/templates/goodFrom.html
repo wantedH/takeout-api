@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+>
+
+
+<head>
+    <meta charset="UTF-8">
+
+    <link href="/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="/css/common.css" rel="stylesheet" crossorigin="anonymous">
+    <script src="/dist/js/bootstrap.min.js"></script>
+    <title>店铺</title>
+    <style type="text/css">
+        span {
+            color: dodgerblue;
+            font-size: 26px;
+        }
+
+        input {
+            font-size: 26px;
+        }
+    </style>
+</head>
+<body>
+
+
+<nav class="site-header sticky-top py-1">
+    <div class="container d-flex flex-column flex-md-row justify-content-between">
+        <a class="py-2" href="/index">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                 class="d-block mx-auto">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="14.31" y1="8" x2="20.05" y2="17.94"></line>
+                <line x1="9.69" y1="8" x2="21.17" y2="8"></line>
+                <line x1="7.38" y1="12" x2="13.12" y2="2.06"></line>
+                <line x1="9.69" y1="16" x2="3.95" y2="6.06"></line>
+                <line x1="14.31" y1="16" x2="2.83" y2="16"></line>
+                <line x1="16.62" y1="12" x2="10.88" y2="21.94"></line>
+            </svg>
+        </a>
+        <a class="py-2 d-none d-md-inline-block" href="/info">商户</a>
+        <a class="py-2 d-none d-md-inline-block" href="/goods">商品</a>
+        <a class="py-2 d-none d-md-inline-block" href="/orders">订单</a>
+        <a class="py-2 d-none d-md-inline-block" href="/logout">退出</a>
+    </div>
+</nav>
+
+<section class="jumbotron">
+    <div class="container">
+        <div class="align-items-center">
+            <span>展示图 :</span>
+            <form id="uploadForm">
+                <input id="avatar" class="parameter" type="file" name="file">
+                <input th:if="${dataStr} ne null" id="doUpload" type="button" value="确定">
+            </form>
+
+            <img id="showAvatar" style="width: 60%;height: 60%">
+        </div>
+        <br>
+        <div>
+            <p th:if="${dataStr} ne null"><span>状态 : </span><span id="state"></span>
+                <button id="stateButton" type="button" class=""></button>
+                <input id="stateValue" hidden >
+            </p>
+            </p>
+            <p><span>菜名 : </span><input id="goodsname"/></p>
+            <p><span>价格 : </span><input id="price"/></p>
+            <p><span>介绍 : </span><textarea id="gooddoc" style="font-size: 26px;width: 90%"></textarea></p>
+
+        </div>
+        <p>
+            <a th:if="${dataStr} eq null" id="doAdd" href="javascript:void(0)" class="btn btn-primary my-2">添加</a>
+            <a th:if="${dataStr} ne null" id="doChange" href="javascript:void(0)" class="btn btn-primary my-2">修改</a>
+            <a th:if="${dataStr} ne null" id="doDelete" href="javascript:void(0)" class="btn btn-secondary my-2">删除</a>
+        </p>
+    </div>
+</section>
+
+
+<div class="d-md-flex flex-md-equal w-100 my-md-3 pl-md-3">
+
+</div>
+
+
+<footer class="container py-5">
+    <div class="row">
+        <div class="col-12 col-md">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                 class="d-block mb-2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="14.31" y1="8" x2="20.05" y2="17.94"></line>
+                <line x1="9.69" y1="8" x2="21.17" y2="8"></line>
+                <line x1="7.38" y1="12" x2="13.12" y2="2.06"></line>
+                <line x1="9.69" y1="16" x2="3.95" y2="6.06"></line>
+                <line x1="14.31" y1="16" x2="2.83" y2="16"></line>
+                <line x1="16.62" y1="12" x2="10.88" y2="21.94"></line>
+            </svg>
+            <small class="d-block mb-3 text-muted">© 2017-2018</small>
+        </div>
+        <div class="clo-6 col-md">
+            <h5>ECJTU.Zjf.TakeOutProject</h5>
+
+        </div>
+
+
+    </div>
+</footer>
+
+
+<script src="/js/jquery-3.4.0.min.js"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var dataStr = [[${dataStr}]]
+    var userId = [[${session.SPRING_SECURITY_CONTEXT.authentication.principal.id}]]
+    /*]]>*/
+    var stateChoose = {false:{state: "停售", class: "btn btn-primary", text: "改为在售"},
+    true:{state: "在售", class: "btn btn-secondary", text: "改为停售"}};
+
+    $(document).ready(function () {
+        var goodInfo = {};
+        if (dataStr != null) {
+            $.post("/goods/detail", {id: dataStr}, function (res) {
+                var dataObj = JSON.parse(res);
+                if (dataObj.salerId != userId) {
+                    alert("非所属")
+                    window.location.href = "/index";
+                }
+                else {
+                    goodInfo = dataObj;
+                    $("#goodsname").val(goodInfo.name);
+                    $("#price").val(goodInfo.price);
+                    $("#gooddoc").val(goodInfo.doc);
+                    $("#showAvatar").attr("src", "/" + goodInfo.avatar);
+                    $("#stateValue").val(""+goodInfo.state);
+
+                    $("#state").html(stateChoose[goodInfo.state].state);
+                    $("#stateButton").attr("class",stateChoose[goodInfo.state].class);
+                    $("#stateButton").html(stateChoose[goodInfo.state].text);
+                }
+            })
+        }
+        $("#doDelete").click(function () {
+            $.post("/goods/delete", {id:dataStr}, function (res) {
+                if (res == true) {
+                    alert("删除成功");
+                    window.location.href = "/index";
+                } else {
+                    alert("失败!请重试");
+                }
+            })
+        });
+        $("#stateButton").click(function () {
+            var tmp=null;
+            if($("#stateValue").val()=="true"){
+                tmp=false;
+            }else {
+                tmp=true;
+            }
+            $("#stateValue").val(tmp);
+            $("#state").html(stateChoose[tmp].state);
+            $("#stateButton").attr("class",stateChoose[tmp].class);
+            $("#stateButton").html(stateChoose[tmp].text);
+        });
+        //
+        $("#doAdd").click(function () {
+            var myform = new FormData()
+            myform.append('file', $('#avatar')[0].files[0]);
+            myform.append("name",$("#goodsname").val());
+            myform.append("price",parseFloat($("#price").val()));
+            myform.append("doc",$("#gooddoc").val());
+
+            $.ajax({
+                url: '/goods/add',
+                type: 'POST',
+                cache: false,
+                data: myform,
+                processData: false,
+                contentType: false
+            }).done(function (res) {
+                if (res == true) {
+                    alert("上传成功");
+                    window.location.href = "/goods";
+                } else {
+                    alert("失败!请重试");
+                }
+            }).fail(function (res) {
+                alert("连接出错");
+            });
+        });
+        $("#doUpload").click(function () {
+            var myform = new FormData()
+            myform.append('file', $('#avatar')[0].files[0]);
+            myform.append('id', dataStr);
+            $.ajax({
+                url: '/goods/uploadAvatar',
+                type: 'POST',
+                cache: false,
+                data: myform,
+                processData: false,
+                contentType: false
+            }).done(function (res) {
+                if (res == true) {
+                    alert("上传成功");
+                    window.location.reload();
+                } else {
+                    alert("失败!请重试");
+                }
+            }).fail(function (res) {
+                alert("连接出错,请检查信息");
+            });
+        });
+        //
+        $("#doChange").click(function () {
+
+            if (goodInfo.name == $("#goodsname").val() &&
+                goodInfo.price == $("#price").val() &&
+                goodInfo.doc == $("#gooddoc").val() &&
+                goodInfo.state.toString() == $("#stateValue").val()){
+                alert("请做出修改");
+            } else {
+                var msg = "将会修改 --"
+                var dataObj = {};
+                if (goodInfo.name != $("#goodsname").val()) {
+                    dataObj.name = $("#goodsname").val();
+                    msg += " 名字"
+                }
+                if (goodInfo.price != $("#price").val()) {
+                    dataObj.price = $("#price").val();
+                    msg += " 价格"
+                }
+                if (goodInfo.doc != $("#gooddoc").val()) {
+                    dataObj.doc = $("#gooddoc").val();
+                    msg += " 介绍"
+                }
+
+                if (goodInfo.state.toString() != $("#stateValue").val()){
+                    dataObj.state = $("#stateValue").val();
+                    msg += " 出售状态"
+                }
+                alert(msg);
+                dataObj.id = goodInfo.id;
+                dataObj.salerId = goodInfo.salerId;
+//                alert(JSON.stringify(dataObj));
+                $.post("/goods/change", dataObj, function (res) {
+                    if (res == true) {
+                        alert("修改成功");
+                        window.location.reload();
+                    } else {
+                        alert("失败!请重试");
+                    }
+                })
+            }
+        });
+    });
+</script>
+
+
+</body>
+</html>
+

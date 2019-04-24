@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.segments.MergeSegments;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import ecjtu.zjf.takeoutapi.common.FileUtil;
 import ecjtu.zjf.takeoutapi.entity.Saler;
 import ecjtu.zjf.takeoutapi.service.ISalerService;
@@ -23,8 +24,10 @@ import springfox.documentation.annotations.Cacheable;
 import java.io.IOException;
 import java.io.Serializable;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 
 /**
@@ -85,23 +88,43 @@ public class SalerController {
 
     @ApiOperation("修改信息")
     @PostMapping(value = "/change")
-    public boolean change(@RequestBody Saler saler){
+    public boolean change(Saler saler){
         QueryWrapper<Saler> wrapper=new QueryWrapper<>();
-        wrapper.eq("id",saler.getId());
-        return iSalerService.update(saler,wrapper);
+        Saler tar = (Saler) SecurityContextHolder.getContext().getAuthentication() .getPrincipal();
+        wrapper.eq("id",tar.getId());
+
+        boolean res=iSalerService.update(saler,wrapper);
+        if(res){
+            if(StringUtils.isNotEmpty(saler.getName())) tar.setName(saler.getName());
+            if(StringUtils.isNotEmpty(saler.getLocation())) tar.setLocation(saler.getLocation());
+            if(StringUtils.isNotEmpty(saler.getTel())) tar.setTel(saler.getTel());
+        }
+        return  res;
     }
+
+    @Autowired FileUtil fileUtil;
 
     @ApiOperation("修改展示图")
     @PostMapping(value = "/uploadAvatar")
-    @Async
     public boolean uploadAvatar(@RequestParam MultipartFile file) throws IOException {
-        String name=FileUtil.TransformFile(file);
+        String[] words=file.getOriginalFilename().split("\\.");
+        String name=new Date().getTime()+"."+words[words.length-1];
+
+        fileUtil.transformFile(file,name);
+
         Saler saler = (Saler) SecurityContextHolder.getContext().getAuthentication() .getPrincipal();
-        saler.setAvatar(name);
+        String oldName=saler.getAvatar().split("\\?")[0];
+        boolean delFlag=true;
+        if(oldName.length()==saler.getAvatar().length()) delFlag=false;
+        saler.setAvatar("pic/"+name+'?'+ UUID.randomUUID());
 
         QueryWrapper<Saler> wrapper=new QueryWrapper<>();
         wrapper.eq("id",saler.getId());
-        return iSalerService.update(saler,wrapper);
+        boolean res= iSalerService.update(saler,wrapper);
+        if(res&&delFlag){
+            fileUtil.deletePicFile(oldName.substring(4));
+        }
+        return res;
     }
 
 }

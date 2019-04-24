@@ -43,6 +43,19 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
         return orderMapper.selectPage(page,queryWrapper).getRecords();
     }
 
+    @Override
+    public List<Orders> pageSalerOrders(int id, int nowPage) {
+        Page<Orders> page = new Page<>();
+        page.setCurrent(nowPage);
+        page.setSize(2);
+
+        QueryWrapper<Orders> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("saler_id",id);
+        queryWrapper.orderByDesc("time");
+
+        return orderMapper.selectPage(page,queryWrapper).getRecords();
+    }
+
     @Transactional
     @Override
     public boolean saveOrder(Orders orders, List<GoodsOrderDTO> goodsOrderDTOS) {

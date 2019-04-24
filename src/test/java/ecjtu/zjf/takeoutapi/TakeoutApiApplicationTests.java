@@ -1,5 +1,6 @@
 package ecjtu.zjf.takeoutapi;
 
+import ecjtu.zjf.takeoutapi.common.FileUtil;
 import ecjtu.zjf.takeoutapi.entity.Saler;
 import ecjtu.zjf.takeoutapi.mapper.SalerMapper;
 import ecjtu.zjf.takeoutapi.service.ISalerService;
@@ -23,6 +24,15 @@ public class TakeoutApiApplicationTests {
 
         Saler saler = iSalerService.getById(1);
         System.out.println(saler);
+    }
+
+    @Autowired
+    FileUtil fileUtil;
+
+    @Test
+    public void deletetest() {
+
+
     }
 
 }

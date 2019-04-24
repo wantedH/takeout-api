@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+>
+
+
+<head>
+    <meta charset="UTF-8">
+
+    <link href="dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="css/common.css" rel="stylesheet" crossorigin="anonymous">
+    <script src="js/jquery-3.4.0.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="/dist/js/bootstrap.min.js"></script>
+    <title>订单</title>
+    <style type="text/css">
+        span{
+            color:dodgerblue;
+            font-size:26px;
+        }
+        input{
+            font-size:26px;
+        }
+    </style>
+</head>
+<body>
+
+
+<nav class="site-header sticky-top py-1">
+    <div class="container d-flex flex-column flex-md-row justify-content-between">
+        <a class="py-2" href="/index">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="d-block mx-auto"><circle cx="12" cy="12" r="10"></circle><line x1="14.31" y1="8" x2="20.05" y2="17.94"></line><line x1="9.69" y1="8" x2="21.17" y2="8"></line><line x1="7.38" y1="12" x2="13.12" y2="2.06"></line><line x1="9.69" y1="16" x2="3.95" y2="6.06"></line><line x1="14.31" y1="16" x2="2.83" y2="16"></line><line x1="16.62" y1="12" x2="10.88" y2="21.94"></line></svg>
+        </a>
+        <a class="py-2 d-none d-md-inline-block" href="/info">商户</a>
+        <a class="py-2 d-none d-md-inline-block" href="/goods">商品</a>
+        <a class="py-2 d-none d-md-inline-block" href="/orders">订单</a>
+        <a class="py-2 d-none d-md-inline-block" href="/logout">退出</a>
+    </div>
+</nav>
+
+<main id="main" role="main" class="container">
+
+    
+    <button id="moreOrders" class="btn btn-lg btn-primary btn-block" >更多</button>
+</main>
+
+
+
+<footer class="container py-5">
+    <div class="row">
+        <div class="col-12 col-md">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="d-block mb-2"><circle cx="12" cy="12" r="10"></circle><line x1="14.31" y1="8" x2="20.05" y2="17.94"></line><line x1="9.69" y1="8" x2="21.17" y2="8"></line><line x1="7.38" y1="12" x2="13.12" y2="2.06"></line><line x1="9.69" y1="16" x2="3.95" y2="6.06"></line><line x1="14.31" y1="16" x2="2.83" y2="16"></line><line x1="16.62" y1="12" x2="10.88" y2="21.94"></line></svg>
+            <small class="d-block mb-3 text-muted">© 2017-2018</small>
+        </div>
+        <div class="clo-6 col-md">
+            <h5>ECJTU.Zjf.TakeOutProject</h5>
+
+        </div>
+
+
+
+    </div>
+</footer>
+
+
+
+
+
+
+<script>
+    $(document).ready(function () {
+        var userId = [[${session.SPRING_SECURITY_CONTEXT.authentication.principal.id}]];
+        var i = 1;
+        var count = 1;
+        var choose=["待接单","待配送","配送中","完成"];
+        getGoods();
+        $("#moreOrders").click(function () {
+            getGoods();
+        })
+        $(document).on('click',"[name=detailButton]",function(){
+            var tmp=this;
+            $.post("/goods/orderGoods",{id:$(this).attr("data-id")},function (res) {
+                var data = JSON.parse(res);
+                if (data.length > 0) {
+                    $(tmp).next().find("div").html("");
+                    for (var k = 0; k < data.length; k++) {
+                        $(tmp).next().find("div").append("<p>" +
+                        "                    <span class=\"float-left\" style=\"max-width: 40%\">"+data[k].name+"</span>" +
+                        "                    <span  class=\"float-right text-right\" style=\"max-width: 30%\">x "+data[k].num+"</span>" +
+                        "                </p>" )
+                    }
+                }
+            })
+        });
+        $(document).on('click',"[name=changeState]",function() {
+            var tmp=this;
+            var r=confirm("确定修改吗")
+            if (r==true)
+            {
+                $.post("/order/changeState",{
+                    id:$(tmp).attr("data-id"),
+                    state:$(this).prev().val()
+                },function (res) {
+                    if(res==true){
+                        $(tmp).prev().prev().html("<span>状态:</span>"+choose[parseInt($(tmp).prev().val())]);
+                        alert("ok")
+                    }else{
+                        alert("fail")
+                    }
+                })
+
+            }
+        });
+        function getGoods() {
+
+            $.post("/order/salerOrders", {
+                salerId: userId,
+                nowPage: i
+            }, function (res) {
+                var data = JSON.parse(res);
+
+                if (data.length > 0) {
+                    for (var k = 0; k < data.length; k++) {
+                        $("#moreOrders").before("<div class=\"jumbotron \">" +
+                            "        <h1 class=\"lead text-center\">订单" + data[k].id + "</h1>" +
+                            "" +
+                            "        <p class=\"lead\"><span>用户:</span>" + data[k].userName + "</p>" +
+                            "        <p class=\"lead\"><span>电话:</span>" + data[k].userTel + "</p>" +
+                            "        <p class=\"lead\"><span>地址:</span>" + data[k].userLocation + "</p>" +
+                            "        <hr>" +
+                            "        <p class=\"lead\"><span>菜品数目:</span>" + data[k].totalNumber + "</p>" +
+                            "        <p class=\"lead\"><span>价钱:</span>" + data[k].totalPrice + "</p>" +
+                            "        <p class=\"lead\"><span>日期:</span>" + data[k].time + "</p>" +
+                            "        <p class=\"lead\"><span>状态:</span>" + choose[data[k].state] + "</p>" +
+                            "<select>\n" +
+                            "  <option value =\"0\">待接单</option>\n" +
+                            "  <option value =\"1\">待配送</option>\n" +
+                            "  <option value=\"2\">配送中</option>\n" +
+                            "  <option value=\"3\">完成</option>\n" +
+                            "</select>"+
+                            " <button data-id='"+data[k].id+"' name='changeState' type=\"button\" class=\"btn btn-primary\">确认修改</button> <br>" +
+                            "        <br><button name=\"detailButton\" data-id=\""+data[k].id +"\" class=\"btn btn-primary\" type=\"button\" data-toggle=\"collapse\" data-target=\"#collapseExample-" + count + "\" aria-expanded=\"true\" aria-controls=\"collapseExample-" + count + "\">" +
+                            "            明细" +
+                            "        </button>" +
+                            "        <div class=\"collapse\" id=\"collapseExample-" + count + "\">" +
+                            "            <div id=\"showDiv-" + count + "\" class=\"card card-body\">" +
+                            "            </div>" +
+                            "        </div>" +
+                            "    </div>");
+                        count++;
+                    }
+                    i++;
+                } else {
+                    $("#moreOrders").attr("disabled", "disabled");
+                    $("#moreOrders").html("没有更多了");
+                    $("#moreOrders").addClass("btn-secondary");
+                }
+
+            });
+        }
+    })
+</script>
+
+</body>
+</html>
+
